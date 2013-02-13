@@ -27,9 +27,9 @@ echo "123" > /tmp/queueserver-input
 OR from php
 ```
 $pipe="/tmp/queueserver-input";
-$id = 123;
-$command="/bin/echo $id > $pipe";
-exec($command);
+$fh = fopen($pipe, 'w') or die("can't open file $pipe");
+fwrite($fh, "456");
+
 ```
 
 
