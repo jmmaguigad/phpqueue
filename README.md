@@ -24,6 +24,13 @@ Once you have a daemon setup and listening to a file: queueserver-input. Your ca
 ```
 echo "123" > /tmp/queueserver-input
 ```
+OR from php
+```
+$pipe="/tmp/queueserver-input";
+$id = 123;
+$command="/bin/echo $id > $pipe";
+exec($command);
+```
 
 
 Why
@@ -33,7 +40,7 @@ Why would you want to use this? If you have lots of existing PHP infrastructure 
 TODO
 ==
 * PSR0
-* 
+* Composer
 
 Authors
 ==
