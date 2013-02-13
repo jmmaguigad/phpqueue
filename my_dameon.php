@@ -12,11 +12,6 @@ ini_set('html_errors', 0);
 
 /**
  * myTestClass: an example class that you've created. It must have a __to_string method and at least 1 method that takes an ID that you want to process
- * 
- * @package PTS
- * @version @package_version@
- * @copyright 2012 PTS Inc
- * @author John Hirbour <john@primetimesolutions.com> 
  */
 class myTestClass{
     public function __toString() {
@@ -43,6 +38,7 @@ try
 {
     // FIFO file that will be used to send messages
     $pipe_file="/tmp/queueserver-input";
+
     // create a new queue instance giving the pipefile, true (that we want syslog), syslog_app_name (optional), syslog facility (optional)
     $Queue = new PhpQueue($pipe_file,true,"Netsuite Order batcher",LOG_LOCAL6);
 

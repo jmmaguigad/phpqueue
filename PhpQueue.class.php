@@ -128,6 +128,5 @@ class PhpQueue{
             if(QUEUESERVER_FORK) ob_clean();
         }//end while running
     } // end readQueue
-
-} // Queue
+} // end class PhpQueue
 ?>

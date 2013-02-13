@@ -1,21 +1,21 @@
 #!/bin/bash
 #
-#   /etc/init.d/order_queue
+#   /etc/init.d/my_dameon
 #
 # Starts the at daemon
 #
 # chkconfig: 345 95 5
 # description: Runs the demonstration daemon.
-# processname: order_queue
+# processname: my_dameon
  
 # Source function library.
 . /etc/init.d/functions
  
 #startup values
-prog="order_queue"
-prog_file_name="order_queue.php"
-proc=/var/lock/subsys/order_queue
-bin=/home/vagrant/git/utilities/netsuite_order_batching/order_queue.php
+prog="my_dameon"
+prog_file_name="my_dameon.php"
+proc=/var/lock/subsys/my_dameon
+bin=/home/vagrant/git/utilities/netsuite_order_batching/my_dameon.php
  
 #verify that the executable exists
 test -x $bin || exit 0RETVAL=0
