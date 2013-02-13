@@ -4,9 +4,9 @@ A Php Queuing system using FIFO files
 
 Based on:
 ===
-This is based on the work done here: http://squirrelshaterobots.com/programming/php/building-a-queue-server-in-php-part-4-run-as-a-background-daemon-a-k-a-forking/
+This is based on the work/tutorial done here: http://squirrelshaterobots.com/programming/php/building-a-queue-server-in-php-part-4-run-as-a-background-daemon-a-k-a-forking/
 
-[https://github.com/bobmajdakjr|bobmajdakjr| on Github
+https://github.com/bobmajdakjr|bobmajdakjr| on Github
 
 Files:
 ===
@@ -16,20 +16,32 @@ Files:
 
 Usage:
 ====
+Use this code to create a Daemon that will listen for input on a FIFO file. This allows you to items to a Daemon in a non-blocking/asynchronous fashion.
+
+Typical usage would be sending data to a slow webservice. Your calling code writes an ID to a file... and moves on. The Daemon handles actually doing the work but doesn't make the caller wait.
+
+Once you have a daemon setup and listening to a file: queueserver-input. Your calling code can just do this:
+```
+echo "123" > /tmp/queueserver-input
+```
+
 
 Why
 ==
 Why would you want to use this? If you have lots of existing PHP infrastructure and you need some non-blocking message queing-like functionality.
 
-Authors
---------------------------------
+TODO
+==
+* PSR0
+* 
 
+Authors
+==
  * Orginal Author: Bob Majdak Jr <bob@catch404.net> (@bobmajdakjr)
 * Modified By: John Hirbour <john@hirbour.org> (@jhirbour)
 
 License
---------------------------------
-
+==
 This project and all its files are licensed under the New BSD License. Here it is...
 
 Copyright (c) 2013 All rights reserved.
