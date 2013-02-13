@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+#   /etc/init.d/order_queue
+#
+# Starts the at daemon
+#
+# chkconfig: 345 95 5
+# description: Runs the demonstration daemon.
+# processname: order_queue
+ 
+# Source function library.
+. /etc/init.d/functions
+ 
+#startup values
+prog="order_queue"
+prog_file_name="order_queue.php"
+proc=/var/lock/subsys/order_queue
+bin=/home/vagrant/git/utilities/netsuite_order_batching/order_queue.php
+ 
+#verify that the executable exists
+test -x $bin || exit 0RETVAL=0
+
+# get the PID of the process if it's running
+# because our daemon runs as php somefile.php  we can't use usefull things like pgrep etc... so we do this hack
+PID=$(ps aux | grep $prog_file_name | grep -v grep | awk '{print $2}')
+ 
+#
+#   Set prog, proc and bin variables.
+#
+ 
+start() {
+    # Check if Daemon is already running
+    if [ ! -f $proc ]; then
+        echo -n $"Starting $prog: "
+        daemon $bin
+        RETVAL=$?
+        [ $RETVAL -eq 0 ] && touch $proc
+        echo
+    fi
+    # echo "Started with PID: $PID"
+    return $RETVAL
+}
+ 
+stop() {
+    # TODO there is a bug here... it doesn't print the pretty green [ OK ] text... 
+    echo -n $"Stopping $prog: "
+    if [ -z "$PID" ]; then
+        echo "$prog_file_name is not running"
+        return 0
+    fi
+    #kill -9 $PID
+    kill -s SIGKILL $PID
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f $proc
+    echo
+        return $RETVAL
+}
+ 
+restart() {
+    stop
+    start
+}   
+ 
+reload() {
+    restart
+}   
+ 
+status_at() {
+    #status $bin
+    if [ -z "$PID" ]; then
+        echo "$prog_file_name is not running"
+    else
+        echo "$prog_file_name is running (pid $PID)"
+    fi
+}
+ 
+case "$1" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+reload|restart)
+    restart
+    ;;
+condrestart)
+        if [ -f $proc ]; then
+            restart
+        fi
+        ;;
+status)
+    status_at
+    ;;
+*)
+ 
+echo $"Usage: $0 {start|stop|restart|condrestart|status}"
+    exit 1
+esac
+ 
+exit $?
+exit $RETVAL
