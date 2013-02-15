@@ -13,6 +13,18 @@ class PhpQueue{
      */
     private $syslog_on;
 
+
+    /**
+     * pipe_permissions_octal : file permissions in octal
+     *    
+     * @var octal
+     */
+    private $pipe_permissions_octal = 0666;
+    /**
+     * group that will own the pipe
+     */
+    private $pipe_owning_group;
+
     /**
      * __construct 
      * 
@@ -21,9 +33,12 @@ class PhpQueue{
      * @param mixed $_fork_debug : if you want to debug the object defaults to false
      * @return void
      */
-    public function __construct($_pipe_file,$_use_syslog,$_syslog_app_name,$_syslog_facility){
+    public function __construct($_pipe_file,$_use_syslog,$_syslog_app_name,$_syslog_facility,$_pipe_permissions_octal,$_pipe_owning_group){
         $this->pipe_file=$_pipe_file;
         $this->syslog_on=$_use_syslog;
+        $this->pipe_permissions_octal=$_pipe_permissions_octal;
+        $this->pipe_owning_group=$_pipe_owning_group;
+
         if($this->syslog_on){
             $this->setupSyslog($_syslog_app_name,$_syslog_facility);
             syslog(LOG_INFO, "Queue Reader Started");
@@ -58,9 +73,12 @@ class PhpQueue{
         }   
 
         umask(0);
-        if(!posix_mkfifo($_pipe_file,0666)){
+        if(!posix_mkfifo($_pipe_file,$this->pipe_permissions_octal)){
             die('unable to create named pipe');
         }   
+        if($this->pipe_owning_group != NULL) {
+            chgrp($_pipe_file,$this->pipe_owning_group);
+        }
 
         $pipe = fopen($_pipe_file,'r+');
         if(!$pipe){
@@ -128,5 +146,6 @@ class PhpQueue{
             if(QUEUESERVER_FORK) ob_clean();
         }//end while running
     } // end readQueue
-} // end class PhpQueue
+
+} // PhpQueue
 ?>
